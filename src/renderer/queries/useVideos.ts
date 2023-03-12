@@ -1,15 +1,18 @@
 import { ConvertDTO, VideoFile } from '../../main/event';
 import { useMutation, useQuery } from 'react-query';
-import { onElectronMessage, sendElectronMessage } from '../utils';
+import { useElectronService } from '../services/electron';
 
 const useVideos = (path: string | null) => {
+  const { sendElectronMessage, waitForElectronMessage } = useElectronService();
+
   const fetchVideos = () => {
-    return new Promise<VideoFile[]>((resolve, reject) => {
+    return new Promise<VideoFile[]>(async (resolve, reject) => {
       if (path) {
         sendElectronMessage('list-files', [path]);
-        onElectronMessage('list-files', (arg) => {
-          resolve(arg as VideoFile[]);
-        });
+        const videos: VideoFile[] = (await waitForElectronMessage(
+          'list-files'
+        )) as VideoFile[];
+        resolve(videos);
       } else {
         resolve([]);
       }
@@ -29,11 +32,10 @@ const useVideos = (path: string | null) => {
   );
 
   const convertMutation = useMutation<void, Error, ConvertDTO>(async (dto) => {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       sendElectronMessage('format-video', [dto]);
-      onElectronMessage('format-video', () => {
-        resolve();
-      });
+      await waitForElectronMessage('format-video');
+      resolve();
     });
   }, {});
 

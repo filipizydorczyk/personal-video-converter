@@ -1,10 +1,11 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { useVaultContext } from './contexts/vault-context';
-import { onElectronMessage } from './utils';
+import { useElectronService } from './services/electron';
 import DirectorySelectionView from './views/DirectorySelectionView';
 import VideoDashboardView from './views/VideoDashboardView';
 
 export default function App() {
+  const { onElectronMessage } = useElectronService();
   const vault = useVaultContext();
 
   onElectronMessage('directory-picker', (arg) => {

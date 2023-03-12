@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button, Row } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
-import { sendElectronMessage } from 'renderer/utils';
+import { useElectronService } from 'renderer/services/electron';
 import { useNavigate } from 'react-router-dom';
 import { useVaultContext } from '../contexts/vault-context';
 import { useQueryClient } from 'react-query';
@@ -10,6 +10,7 @@ const DirectorySelectionView = () => {
   const nav = useNavigate();
   const vault = useVaultContext();
   const queryClient = useQueryClient();
+  const { sendElectronMessage } = useElectronService();
 
   useEffect(() => {
     if (vault.path !== null) {

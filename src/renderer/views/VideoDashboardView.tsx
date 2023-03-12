@@ -6,11 +6,12 @@ import VideoPlayer from '../components/VideoPlayer';
 import { useVaultContext } from '../contexts/vault-context';
 import VideoList from '../components/VideoList';
 import State from '../components/State';
-import { onElectronMessageTmp } from '../utils';
+import { useElectronService } from '../services/electron';
 
 const VideoDashboardView = () => {
   const nav = useNavigate();
   const vault = useVaultContext();
+  const { onElectronMessage } = useElectronService();
   const { query, deleteMutation, convertMutation } = useVideos(vault.path);
   const [video, setVideo] = useState<string>('');
   const [statusMsg, setStatusMsg] = useState<string>('');
@@ -20,7 +21,7 @@ const VideoDashboardView = () => {
     if (vault.path === null) nav('/vault');
   }, [deleteMutation.isLoading, convertMutation.isLoading]);
 
-  onElectronMessageTmp('log-status', (data) => {
+  onElectronMessage('log-status', (data) => {
     setStatusMsg(`${data}`);
   });
 
