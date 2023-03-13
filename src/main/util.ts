@@ -26,3 +26,15 @@ export function getVideoFilesInDir(dir: string) {
       ['mp4', 'mov', 'avi', 'mkv', 'wmv'].includes(file.split('.').pop() || '')
     );
 }
+
+/**
+ * Function to change original file extension to new one
+ * @link https://stackoverflow.com/questions/5953239/how-do-i-change-file-extension-with-javascript
+ * @param file path with file name to change extension
+ * @param extension should include the dot, for example '.html'
+ * @returns new absolute path with changed extension
+ */
+export function changeFileExt(file: string, extension: string) {
+  const basename = path.basename(file, path.extname(file));
+  return path.join(path.dirname(file), basename + extension);
+}

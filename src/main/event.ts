@@ -1,7 +1,6 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron';
 
 import * as path from 'path';
-import { spawn } from 'child_process';
 import { useFfmpegRepository } from './ffmpeg';
 import { getVideoFilesInDir } from './util';
 
@@ -57,7 +56,6 @@ const useEvents = (mainWindow: BrowserWindow | null) => {
   });
 
   ipcMain.on('window-max', async (event, args) => {
-    console.log(mainWindow?.isMaximized);
     mainWindow?.isMaximized()
       ? mainWindow.unmaximize()
       : mainWindow?.maximize();

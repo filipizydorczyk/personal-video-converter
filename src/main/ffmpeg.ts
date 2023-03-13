@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 
 import * as path from 'path';
+import { changeFileExt } from './util';
 
 const useFfmpegRepository = () => {
   const convertFile = (
@@ -9,7 +10,7 @@ const useFfmpegRepository = () => {
     event: Electron.IpcMainEvent
   ) => {
     return new Promise((resolve, reject) => {
-      const targetPath = path.join(path.dirname(filePath), `output.${target}`);
+      const targetPath = changeFileExt(filePath, `.${target}`);
 
       const convertProc = spawn(
         'ffmpeg',
