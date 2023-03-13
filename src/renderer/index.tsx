@@ -1,5 +1,6 @@
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-range-slider-input/dist/style.css';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { VaultProvider } from './contexts/vault-context';

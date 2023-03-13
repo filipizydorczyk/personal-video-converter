@@ -1,6 +1,5 @@
 import { spawn } from 'child_process';
 
-import * as path from 'path';
 import { changeFileExt } from './util';
 
 const useFfmpegRepository = () => {
