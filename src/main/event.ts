@@ -1,8 +1,9 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron';
-import * as fs from 'fs';
+
 import * as path from 'path';
 import { spawn } from 'child_process';
 import { useFfmpegRepository } from './ffmpeg';
+import { getVideoFilesInDir } from './util';
 
 type VideoFile = {
   name: string;
@@ -30,7 +31,7 @@ const useEvents = (mainWindow: BrowserWindow | null) => {
   ipcMain.on('list-files', async (event, args) => {
     const vault = args[0];
     if (typeof vault === 'string') {
-      const files: VideoFile[] = fs.readdirSync(vault).map((file) => ({
+      const files: VideoFile[] = getVideoFilesInDir(vault).map((file) => ({
         name: file,
         path: `${path.join(vault, file)}`,
         url: `file://${path.join(vault, file)}`,

@@ -17,9 +17,8 @@ const VideoDashboardView = () => {
   const [statusMsg, setStatusMsg] = useState<string>('');
 
   useEffect(() => {
-    console.log(deleteMutation.isLoading, convertMutation.isLoading);
     if (vault.path === null) nav('/vault');
-  }, [deleteMutation.isLoading, convertMutation.isLoading]);
+  }, []);
 
   onElectronMessage('log-status', (data) => {
     setStatusMsg(`${data}`);
