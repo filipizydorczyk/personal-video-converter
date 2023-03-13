@@ -6,7 +6,10 @@ export type Channels =
   | 'directory-picker'
   | 'list-files'
   | 'format-video'
-  | 'log-status';
+  | 'log-status'
+  | 'window-close'
+  | 'window-max'
+  | 'window-min';
 
 const electronHandler = {
   ipcRenderer: {
