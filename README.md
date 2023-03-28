@@ -8,7 +8,7 @@ You gonna have a list with all videos inside this direcotry (other files and dir
 
 ![](./screenshots/video-dashboard.png)
 
-If you perform some kind of action other buttons will be disabled until this action finishes and standard output will be displayed on top in the left corner.
+If you perform some kind of action other buttons will be disabled until this action finishes and standard output will be displayed on top in the left corner (real time).
 
 ![](./screenshots/processing.png)
 
