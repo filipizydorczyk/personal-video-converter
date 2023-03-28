@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
 import * as Icon from 'react-bootstrap-icons';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Badge } from 'react-bootstrap';
 
 type VideoListItemProps = {
   name: string;
   path: string;
   url: string;
-  isCut?: boolean;
   isDisabled?: boolean;
   onClick?: (path: string) => void;
+  onCutHanlder?: (path: string) => void;
   onDeleteHandler?: (path: string) => void;
   onConvertHandler?: (path: string, target: 'mp4' | 'mov') => void;
 };
@@ -17,9 +17,9 @@ const VideoListItem: FC<VideoListItemProps> = ({
   name,
   path,
   url,
-  isCut = false,
   isDisabled = false,
   onClick = () => {},
+  onCutHanlder = () => {},
   onDeleteHandler = () => {},
   onConvertHandler = () => {},
 }) => {
@@ -30,7 +30,9 @@ const VideoListItem: FC<VideoListItemProps> = ({
   return (
     <Row className="px-2 py-1 align-items-center bg-hover-light border-radius-15">
       <Col onClick={itemClickHandler}>
-        <p className="m-0">{name}</p>
+        <p className="m-0">
+          {path.includes('.CUT') && <Badge bg="secondary">CUT</Badge>} {name}
+        </p>
       </Col>
       <Col className="px-1" xs="auto">
         <Button
@@ -53,7 +55,12 @@ const VideoListItem: FC<VideoListItemProps> = ({
         </Button>
       </Col>
       <Col className="px-1" xs="auto">
-        <Button className="p-1" variant="secondary" disabled={isDisabled}>
+        <Button
+          className="p-1"
+          variant="secondary"
+          disabled={isDisabled}
+          onClick={() => onCutHanlder(path)}
+        >
           <Icon.Scissors />
         </Button>
       </Col>

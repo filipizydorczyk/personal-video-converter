@@ -1,9 +1,10 @@
-import { ConvertDTO, VideoFile } from '../../main/event';
-import { useMutation, useQuery } from 'react-query';
+import type { ConvertDTO, VideoFile, CutVideoDTO } from '../../main/event';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useElectronService } from '../services/electron';
 
 const useVideos = (path: string | null) => {
   const { sendElectronMessage, waitForElectronMessage } = useElectronService();
+  const queryClient = useQueryClient();
 
   const fetchVideos = () => {
     return new Promise<VideoFile[]>(async (resolve, reject) => {
@@ -39,7 +40,16 @@ const useVideos = (path: string | null) => {
     });
   }, {});
 
-  return { query, deleteMutation, convertMutation };
+  const cutMutation = useMutation<void, Error, CutVideoDTO>(async (dto) => {
+    return new Promise(async (resolve) => {
+      sendElectronMessage('cut-video', [dto]);
+      await waitForElectronMessage('cut-video');
+      queryClient.refetchQueries(['videos']);
+      resolve();
+    });
+  }, {});
+
+  return { query, deleteMutation, convertMutation, cutMutation };
 };
 
 export default useVideos;

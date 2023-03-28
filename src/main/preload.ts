@@ -7,6 +7,7 @@ export type Channels =
   | 'list-files'
   | 'format-video'
   | 'log-status'
+  | 'cut-video'
   | 'window-close'
   | 'window-max'
   | 'window-min';

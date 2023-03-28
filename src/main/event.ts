@@ -1,6 +1,7 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron';
 
 import * as path from 'path';
+import * as fs from 'fs';
 import { useFfmpegRepository } from './ffmpeg';
 import { getVideoFilesInDir } from './util';
 
@@ -15,8 +16,14 @@ type ConvertDTO = {
   target: 'mp4' | 'mov';
 };
 
+type CutVideoDTO = {
+  path: string;
+  start: string;
+  duration: string;
+};
+
 const useEvents = (mainWindow: BrowserWindow | null) => {
-  const { convertFile } = useFfmpegRepository();
+  const { convertFile, cutVideo } = useFfmpegRepository();
 
   ipcMain.on('directory-picker', async (event, args) => {
     if (mainWindow) {
@@ -65,12 +72,22 @@ const useEvents = (mainWindow: BrowserWindow | null) => {
     mainWindow?.minimize();
   });
 
-  // ipcMain.on(FORMAT_VIDEO, async (event, args) => {
-  //   //     mkdir -p originals
-  //   // FILE_NAME=$(echo "$1" | cut -f 1 -d '.')
-  //   // ffmpeg -ss "$2" -i $1 -c copy -t "$3" $FILE_NAME-cuted.mp4
-  //   // mv ./$1 ./originals/$1
-  // });
+  ipcMain.on('cut-video', async (event, args) => {
+    const dto = args[0];
+    if (
+      dto &&
+      typeof dto.path === 'string' &&
+      typeof dto.start === 'string' &&
+      typeof dto.duration === 'string'
+    ) {
+      const workdir = path.dirname(dto.path);
+      const originaldir = `${workdir}/originals`;
+      await cutVideo(dto.path, dto.start, dto.duration, event);
+      fs.mkdirSync(originaldir, { recursive: true });
+      fs.renameSync(dto.path, path.join(originaldir, path.basename(dto.path)));
+      event.reply('cut-video', null);
+    }
+  });
 };
 
-export { useEvents, VideoFile, ConvertDTO };
+export { useEvents, VideoFile, ConvertDTO, CutVideoDTO };

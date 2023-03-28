@@ -5,6 +5,7 @@ import { VideoFile } from '../../main/event';
 type VideoListProps = {
   videos: VideoFile[];
   isDisabled?: boolean;
+  onCutHanlder?: (path: string) => void;
   onItemClickHandler?: (path: string) => void;
   onDeleteHandler?: (path: string) => void;
   onConvertHandler?: (path: string, target: 'mp4' | 'mov') => void;
@@ -13,6 +14,7 @@ type VideoListProps = {
 const VideoList: FC<VideoListProps> = ({
   videos,
   isDisabled = false,
+  onCutHanlder = () => {},
   onItemClickHandler = () => {},
   onDeleteHandler = () => {},
   onConvertHandler = () => {},
@@ -35,6 +37,7 @@ const VideoList: FC<VideoListProps> = ({
           url={video.url}
           isDisabled={isDisabled}
           onClick={onItemClickHandler}
+          onCutHanlder={onCutHanlder}
           onDeleteHandler={onDeleteHandler}
           onConvertHandler={onConvertHandler}
         />
